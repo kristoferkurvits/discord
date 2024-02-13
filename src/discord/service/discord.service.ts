@@ -1,12 +1,28 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DiscordClient } from './discord-client.service';
+import { MessageService } from './message/message.service';
+import { Message } from 'discord.js';
 
 
 @Injectable()
 export class DiscordService {
-    constructor(private discordClientService: DiscordClient) {}
+    private readonly logger = new Logger(DiscordService.name);
+    constructor(
+        private readonly discordClientService: DiscordClient,
+        private readonly messageService: MessageService
+    ) { }
 
-  initialize() {
-    this.discordClientService.onReady(() => Logger.log(`${process.env.BOT_NAME} reporting for duty!`));
-  }
+    initialize() {
+        this.discordClientService.onReady(() => this.logger.log(`${process.env.BOT_NAME} reporting for duty!`));
+        this.onMessageListener();
+    }
+
+    private onMessageListener(): void {
+        this.discordClientService.onMessage((message: Message): void => {
+            if(!this.messageService.rightBotHasBeenAdressed(message.content)) {
+                return;
+            }
+            
+        })
+    }
 }
