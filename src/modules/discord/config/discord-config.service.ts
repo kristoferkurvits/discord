@@ -19,9 +19,9 @@ export class DiscordConfig implements OnModuleInit {
     });
   }
 
-  async onModuleInit(): Promise<void> {
+  onModuleInit(): void {
     try {
-      await this.client.login(this.configService.getOrThrow<string>("DISCORD_TOKEN"));
+      this.client.login(this.configService.getOrThrow<string>("DISCORD_TOKEN"));
       this.logger.log('Discord bot logged in successfully');
     } catch (error) {
       this.logger.error('Error during Discord bot login', error.stack);
