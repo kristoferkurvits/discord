@@ -3,7 +3,7 @@ import { LLMService } from './service/llm.service';
 import { LLMController } from './llm.controller';
 import { LLaMAClient } from './client/llama-client.service';
 import { AppConfigModule } from '../../config/config.module';
-import { LLaMAService } from './service/llama.service';
+import { LLaMAService } from './service/LLaMA/llama.service';
 
 @Module({
     imports: [AppConfigModule],

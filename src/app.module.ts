@@ -4,7 +4,9 @@ import { envValidations } from './app.validations';
 import { LLMModule } from './modules/llm/llm.module';
 import { ConfigModule } from '@nestjs/config';
 import { AppConfigModule } from './config/config.module';
-
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { ContentTypeInterceptor } from './common/interceptors/content-type.interceptor';
 
 /*
 providers: Array of providers that will be instantiated by the Nest injector and that can be shared at least across this module.
@@ -16,12 +18,22 @@ exports: Array of providers to export to other modules.
   imports: [
     DiscordModule,
     ConfigModule.forRoot({
-        isGlobal: true,
-        envFilePath: `.env.${process.env.NODE_ENV}`,
-        validationSchema: envValidations
-      }),
+      isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}`,
+      validationSchema: envValidations
+    }),
     LLMModule,
     AppConfigModule
-]
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ContentTypeInterceptor,
+    }
+  ]
 })
 export class AppModule {}

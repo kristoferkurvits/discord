@@ -1,9 +1,8 @@
 import { Method } from "axios"
-import { ILLaMARequest } from "../request/LLaMA-request.interface"
 
 export interface IAxiosHttpRequest {
     method: Method,
-    data: ILLaMARequest,
+    data: object,
     headers?: Record<string, string>,
     path?: string
 }

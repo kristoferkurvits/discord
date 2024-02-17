@@ -1,5 +1,5 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
-import { LLaMAService } from './llama.service';
+import { LLaMAService } from './LLaMA/llama.service';
 import { LLMModel } from '../constants/model.enum';
 
 
@@ -13,6 +13,6 @@ export class LLMService {
         if(model === LLMModel.LLaMA2) {
            return await this.llamaService.prompt(context, prompt); 
         }
-        throw new NotImplementedException(model + " not Implemented");
+        throw new NotImplementedException(model + " not implemented");
     }
 }

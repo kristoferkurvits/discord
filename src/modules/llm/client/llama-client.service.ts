@@ -1,14 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { AxiosClient } from "../../../config/axios/axios-client.service";
 import { ConfigService } from "@nestjs/config";
-import { ILLMClient } from "../interfaces/client.interface";
+import { ILLMClient } from "../interfaces/client/client.interface";
+import { ILLaMAResponse } from "../interfaces/LLaMA/response.interface";
 
 @Injectable()
 export class LLaMAClient implements ILLMClient {
-    constructor(private readonly configService: ConfigService, private readonly axiosClient: AxiosClient) {}
+    constructor(private readonly configService: ConfigService, private readonly axiosClient: AxiosClient) { }
 
-    public async prompt(context: string, prompt: string): Promise<string> {
-        return await this.axiosClient.request({
+    public async prompt(context: string, prompt: string): Promise<ILLaMAResponse> {
+        return await this.axiosClient.request<ILLaMAResponse>({
             method: "POST",
             data: {
                 system_message: context,
@@ -19,7 +20,7 @@ export class LLaMAClient implements ILLMClient {
         });
     }
 
-    private constructLLaMAPath() : string {
+    private constructLLaMAPath(): string {
         return this.configService.getOrThrow<string>("LLAMA_BASE_PATH") + "/llama";
     }
 }

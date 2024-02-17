@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestTransformer } from 'axios';
 import axiosRetry from 'axios-retry';
-import { IAxiosHttpRequest } from '../../modules/llm/interfaces/LLaMA/LLaMA.interface';
+import { IAxiosHttpRequest } from '../../common/model/http-request.interface';
 import * as humps from "humps";
 import { Logger } from '@nestjs/common';
 import { HttpClientException, ServiceException } from '../../common/errors';
@@ -15,18 +15,17 @@ export class AxiosClient {
     this.instance = this.createAxiosInstance(config);
   }
 
-  public async request(request: IAxiosHttpRequest): Promise<string> {
+  public async request<T>(request: IAxiosHttpRequest): Promise<T> {
     const requestConfig: AxiosRequestConfig = {
       url: request.path,
       method: request.method,
       headers: {
-        ...this.instance.defaults.headers.common,
+        "Content-Type": "application/json; charset=utf-8",
         ...request.headers
       },
       data: request.data,
     };
-    const response = await this.instance(requestConfig);
-    return response?.data;
+    return await this.instance(requestConfig) as T;
   }
 
   private initializeRetryMechanism(instance: AxiosInstance, config: AxiosRequestConfig) {
@@ -46,6 +45,9 @@ export class AxiosClient {
         },
         ...(axios.defaults.transformRequest as AxiosRequestTransformer[]),
       ],
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
     this.initializeRetryMechanism(instance, config);
     this.initializeInterceptors(instance);
@@ -82,7 +84,7 @@ export class AxiosClient {
     }
   }
 
-  private is5xxError(status: number) : boolean {
+  private is5xxError(status: number): boolean {
     return status >= 500 && status <= 599;
   }
 }
