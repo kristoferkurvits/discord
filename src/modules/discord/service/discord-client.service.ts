@@ -1,4 +1,4 @@
-import { Client, Message } from "discord.js";
+import { Client, Events, Message } from "discord.js";
 import { DiscordConfig } from "../config/discord-config.service";
 import { Injectable } from "@nestjs/common";
 
@@ -16,10 +16,10 @@ export class DiscordClient implements IDiscordClient {
     }
 
     onReady(callback: () => void): void {
-        this.client.on("ready", callback);
+        this.client.once(Events.ClientReady, callback);
     }
 
     onMessage(callback: (message: Message) => void): void {
-        this.client.on('messageCreate', callback);
+        this.client.on(Events.MessageCreate, callback);
     }
 }

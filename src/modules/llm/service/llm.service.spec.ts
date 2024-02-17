@@ -1,12 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LLMService } from './llm.service';
+import { LLaMAService } from './LLaMA/llama.service';
 
-describe('LlmService', () => {
+describe('LLMService', () => {
   let service: LLMService;
+  let mockLLaMAService: Partial<LLaMAService>; // Partial makes all properties optional, allowing for partial mocking
 
   beforeEach(async () => {
+
+    mockLLaMAService = {
+
+    };
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [LLMService],
+      providers: [
+        LLMService,
+        {
+          provide: LLaMAService,
+          useValue: mockLLaMAService,
+        },
+      ],
     }).compile();
 
     service = module.get<LLMService>(LLMService);
@@ -15,4 +28,5 @@ describe('LlmService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
 });
