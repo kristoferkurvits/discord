@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
-import { DiscordModule } from './discord/discord.module';
-import { ConfigModule } from '@nestjs/config';
+import { DiscordModule } from './modules/discord/discord.module';
 import { envValidations } from './app.validations';
-import { LLMService } from './llm/service/llm.service';
-import { LLMModule } from './llm/llm.module';
-import { CommonModule } from './common/common.module';
+import { LLMModule } from './modules/llm/llm.module';
+import { ConfigModule } from '@nestjs/config';
+import { AppConfigModule } from './config/config.module';
 
+
+/*
+providers: Array of providers that will be instantiated by the Nest injector and that can be shared at least across this module.
+controllers: Array of controllers that should be instantiated within the module.
+imports: List of modules required by this module. Any exported providers from these modules will be available in our module via dependency injection.
+exports: Array of providers to export to other modules.
+*/
 @Module({
   imports: [
     DiscordModule,
@@ -15,8 +21,7 @@ import { CommonModule } from './common/common.module';
         validationSchema: envValidations
       }),
     LLMModule,
-    CommonModule
-],
-  providers: [LLMService]
+    AppConfigModule
+]
 })
 export class AppModule {}

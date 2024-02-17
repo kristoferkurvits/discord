@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AxiosClient } from './config/axios.config';
+import { Global } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 
+@Global()
 @Module({
-    imports: [
-        AxiosClient
-    ],
-    providers: [AxiosClient]
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
-export class CommonModule { }
+export class CommonModule {}
