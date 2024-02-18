@@ -7,10 +7,6 @@ import { LLMService } from '../../llm/service/llm.service';
 import { Message } from 'discord.js';
 import { LLMModel } from '../../llm/constants/model.enum';
 import { Logger } from '@nestjs/common';
-import { LLaMAService } from '../../llm/service/LLaMA/llama.service';
-import { LLaMAClient } from '../../llm/client/llama-client.service';
-import { DiscordModule } from '../discord.module';
-
 
 describe('DiscordService', () => {
   let service: DiscordService;
