@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  discord_app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=dev
+    env_file:
+      - .env.dev
+    networks:
+      - discord-network
+    volumes:
+      - .:/usr/src/app/discord_app
+      - /usr/src/app/discord_app/node_modules
+ 
+  llama2:
+    build: ../LLaMA2/
+    ports:
+      - "5000:5000"
+    networks:
+      - discord-network
+    volumes:
+      - .:/usr/src/app/LLaMA2
+      - /usr/src/app/LLaMA2
+
+networks:
+  discord-network:
